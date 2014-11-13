@@ -2,6 +2,11 @@
 #' 
 #' Lookup the latitude and longitude of a location using the place's
 #' name or address.
+#' 
+#' There are charges associated with the use of this function set by 
+#' your Yahoo! BOSS application. See 
+#' \link{https://info.yahoo.com/legal/us/yahoo/boss/pricing/} for pricing
+#' details.
 #' @param location The location name or address you want to lookup
 #' @param name The name of a point of interest to lookup
 #' @param key The Yahoo! Developer Network BOSS application key. Register

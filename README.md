@@ -4,6 +4,14 @@ R interface to the Yahoo! Developers Network APIs.
 
 Currently focused on the [BOSS APIs](https://developer.yahoo.com/boss/) to do geolocation.
 
+## API Key
+
+In order to use this package, you'll need to register an application with Yahoo!. You can do that [here](https://developer.apps.yahoo.com/dashboard/createKey.html?api=boss).
+
+## Pricing
+
+The Yahoo! BOSS APIs are non-open, commercial APIs that have charges associated with them. You can find more information about pricing [here](https://info.yahoo.com/legal/us/yahoo/boss/pricing/).
+
 ## License (MIT)
 
 The MIT License (MIT)

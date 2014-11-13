@@ -20,4 +20,10 @@ for an API key at \link{https://developer.yahoo.com/boss/}}
 Lookup the latitude and longitude of a location using the place's
 name or address.
 }
+\details{
+There are charges associated with the use of this function set by
+your Yahoo! BOSS application. See
+\link{https://info.yahoo.com/legal/us/yahoo/boss/pricing/} for pricing
+details.
+}
 
