@@ -11,7 +11,8 @@ find_place(location, name, key = getOption("RYDN_KEY"),
 
 \item{name}{The name of a point of interest to lookup}
 
-\item{key}{The Yahoo! Developer Network BOSS application key}
+\item{key}{The Yahoo! Developer Network BOSS application key. Register
+for an API key at \link{https://developer.yahoo.com/boss/}}
 
 \item{secret}{The Yahoo! Developer Network BOSS application secret}
 }

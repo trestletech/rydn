@@ -4,7 +4,8 @@
 #' name or address.
 #' @param location The location name or address you want to lookup
 #' @param name The name of a point of interest to lookup
-#' @param key The Yahoo! Developer Network BOSS application key
+#' @param key The Yahoo! Developer Network BOSS application key. Register
+#'   for an API key at \link{https://developer.yahoo.com/boss/}
 #' @param secret The Yahoo! Developer Network BOSS application secret
 find_place <- function(location,
                        name,
