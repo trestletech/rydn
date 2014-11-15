@@ -12,6 +12,7 @@
 #' @param key The Yahoo! Developer Network BOSS application key. Register
 #'   for an API key at \link{https://developer.yahoo.com/boss/}
 #' @param secret The Yahoo! Developer Network BOSS application secret
+#' @import httr
 find_place <- function(location,
                        name,
                        key=getOption("RYDN_KEY"),

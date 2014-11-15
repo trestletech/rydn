@@ -8,4 +8,6 @@ Maintainer: Jeff Allen <jeff@trestletech.com>
 Description: Wraps up the Yahoo! Developers Network (YDN) APIs
     to allow access from R. You can register for an API key at
     https://developer.yahoo.com/boss/
+Imports:
+    httr (>= 0.5)
 License: MIT
