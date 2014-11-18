@@ -33,7 +33,9 @@
 #' @param woeid An integer representing a "Where on Earth ID." See \link{https://developer.yahoo.com/geo/geoplanet/guide/concepts.html#woeids}
 #' @param reverse \code{TRUE} if reverse geocoding (looking up a location by its
 #' latitude and longitude).
-#' @param locale
+#' @param locale The language and country. A two-letter ISO-639 major language 
+#' code and a two-letter ISO-3166-1 alpha-2 country code, separated by either a 
+#' hyphen or underscore. Default is en_US (English/US).
 #' @param flags The \code{flags} parameter to pass through to the YDN query. See
 #' \link{https://developer.yahoo.com/boss/geo/docs/control-parameters.html}.
 #' @param gflags The \code{gflags} parameter to pass through to the YDN query. See
