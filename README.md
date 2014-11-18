@@ -12,13 +12,13 @@ In order to use this package, you'll need to register an application with Yahoo!
 
 ## Pricing
 
-The Yahoo! BOSS APIs are non-open, commercial APIs that have charges associated with them. You can find more information about pricing [here](https://info.yahoo.com/legal/us/yahoo/boss/pricing/).
+The Yahoo! BOSS APIs are non-open, commercial APIs that have charges associated with them. You can find more information about pricing [here](https://info.yahoo.com/legal/us/yahoo/boss/pricing/). There is also a non-commercial mode (`commercial=FALSE`) in which `rydn` will use the non-commercial YQL API which, at the time of writing, [is free](https://developer.yahoo.com/boss/geo/docs/free_YQL.html).
 
 ## FAQ
 
 **Why another Geocoder for R?**
 
-TL;DR: Every free API I looked at either couldn't geocode intersections properly, had overall low quality on the samples I tried, and/or required that I display the results on their branded map. Every commercial option I looked at was cost-prohibitive (thousands of dollars per year to start). Yahoo! BOSS offered a more reasonable price structure and seems to have high quality.
+TL;DR: Every other API I looked at either couldn't geocode intersections properly, had overall low quality on the samples I tried, and/or required that I display the results on their branded map. Every commercial option I looked at was cost-prohibitive (thousands of dollars per year to start). Yahoo! BOSS offered a more reasonable price structure and seems to have high quality; it also offers a free mode currently for under 2,000 queries a day. (Be sure to set `commercial=FALSE` in your requests.)
 
 It turns out that most freely available Geocoders have pretty stringent limitations on what you're allowed to do with their data. Below are a few options and why they didn't work for particular applications of mine. (You should check for yourself, as these restrictions/problems may have changed since I last looked at the service, or I may have misunderstood them.)
 
