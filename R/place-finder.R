@@ -41,6 +41,12 @@
 #' @param gflags The \code{gflags} parameter to pass through to the YDN query. See
 #' \link{https://developer.yahoo.com/boss/geo/docs/control-parameters.html}.
 #' \code{R} will be added if \code{reverse=TRUE}. "J" is always added.
+#' @param commercial If \code{FALSE} (the default), will use the YQL interface
+#' to Yahoo's geo.placefinder table to do the geocoding. This API is currently 
+#' restricted to 2,000 queries per day per app and is intended for non-commercial
+#' usage. If \code{TRUE}, it will use the proper BOSS APIs directly. The 
+#' commercial API is better documented and appears to occasionally return
+#' better results.
 #' @param key The Yahoo! Developer Network BOSS application key. Register
 #'   for an API key at \link{https://developer.yahoo.com/boss/}
 #' @param secret The Yahoo! Developer Network BOSS application secret
@@ -49,7 +55,8 @@
 #' @import httr
 #' @examples
 #' \dontrun{
-#' find_place("SFO")
+#' find_place("151 3rd St., San Francisco, CA", commercial=TRUE)
+#' find_place("151 3rd St., San Francisco, CA", commercial=FALSE)
 #' find_place(name="Yosimete National Park")
 #' find_place(line1="Franklin St at Broadway St, San Francisco, CA, USA 94109")
 #' find_place(house="151", street="3rd St.", postal=94103, city="San Francisco", 
@@ -78,6 +85,7 @@ find_place <- function(location=NULL,
                        locale="en_US",
                        flags="",
                        gflags="",
+                       commercial=FALSE,
                        key=getOption("RYDN_KEY"),
                        secret=getOption("RYDN_SECRET")){
   if (sum(missing(location), missing(woeid), missing(name)) < 2){
@@ -109,9 +117,6 @@ find_place <- function(location=NULL,
     stop("key and secret must both be provided")
   } 
   
-  url <- "https://yboss.yahooapis.com/geo/placefinder"
-  oa <- httr::oauth_app("YDN", key, secret)
-  
   if (reverse){
     gflags <- paste0(gflags, "R")
   }
@@ -140,16 +145,20 @@ find_place <- function(location=NULL,
     flags = flags
   )
   
-  qs <- ""
-  for (n in names(qp)){
-    val <- qp[[n]]
-    if (!is.null(val)){
-      qs <- paste0(qs, n, "=", RCurl::curlEscape(val), "&")  
-    }
+  if (!commercial){
+    qpOpen <- qp
+    qpOpen["text"] <- qp$location
+    qpOpen["location"] <- NULL
+    qpOpen["flags"] <- NULL
+    qs <- listToYQL(qpOpen, "geo.placefinder")
+    url <- "https://query.yahooapis.com/v1/public/yql"
+  } else{
+    qs <- listToQS(qp)
+    url <- "https://yboss.yahooapis.com/geo/placefinder"
   }
-  # Trim last &
-  qs <- substr(qs, 0, nchar(qs)-1)
-  print(qs)
+  
+  oa <- httr::oauth_app("YDN", key, secret)
+  
   urlq <- paste0(url, "?", qs)
   
   sig <- httr::oauth_signature(urlq, app=oa)
@@ -161,11 +170,55 @@ find_place <- function(location=NULL,
   }
   urlqa <- paste0(urlq, oaqstr)
   
-  print(urlqa)
-  
   q <- httr::GET(urlqa)
   stop_for_status(q)
   
-  res <- content(q)$bossresponse$placefinder
-  do.call(rbind.data.frame, res$results)
+  if (!commercial){
+    con <- content(q)
+    res <- con$query$results$Result
+    
+    if (con$query$count > 1){
+      for (i in 1:length(res)){
+        res[[i]][sapply(res[[i]], is.null)] <- NA
+      }  
+      df <- do.call(rbind.data.frame, res)
+    } else{
+      res[sapply(res, is.null)] <- NA
+      df <- as.data.frame(res)
+    }
+  } else{
+    res <- content(q)$bossresponse$placefinder$results
+    df <- do.call(rbind.data.frame, res)
+  }
+  df
+}
+
+listToQS <- function(qp){
+  qs <- ""
+  for (n in names(qp)){
+    val <- qp[[n]]
+    if (!is.null(val)){
+      qs <- paste0(qs, n, "=", RCurl::curlEscape(val), "&")  
+    }
+  }
+  
+  # Trim last &
+  substr(qs, 0, nchar(qs)-1)
+}
+
+listToYQL <- function(qp, table){
+  qs <- paste0("SELECT * FROM ", table, " WHERE ")
+  for (n in names(qp)){
+    val <- qp[[n]]
+    if (!is.null(val)){
+      qs <- paste0(qs, n, "=", paste0('"', val, '"'), " AND ")
+    }
+  }
+  
+  # Trim last ' AND '
+  qs <- substr(qs, 0, nchar(qs)-5)
+  
+  qs <- RCurl::curlEscape(qs)
+  
+  paste0("q=", qs, "&format=json")
 }

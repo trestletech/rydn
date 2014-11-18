@@ -8,7 +8,7 @@ find_place(location = NULL, name = NULL, line1 = NULL, line2 = NULL,
   unit = NULL, xstreet = NULL, postal = NULL, neighborhood = NULL,
   city = NULL, county = NULL, state = NULL, country = NULL,
   woeid = NULL, reverse = FALSE, locale = "en_US", flags = "",
-  gflags = "", key = getOption("RYDN_KEY"),
+  gflags = "", commercial = FALSE, key = getOption("RYDN_KEY"),
   secret = getOption("RYDN_SECRET"))
 }
 \arguments{
@@ -64,6 +64,13 @@ hyphen or underscore. Default is en_US (English/US).}
 \link{https://developer.yahoo.com/boss/geo/docs/control-parameters.html}.
 \code{R} will be added if \code{reverse=TRUE}. "J" is always added.}
 
+\item{commercial}{If \code{FALSE} (the default), will use the YQL interface
+to Yahoo's geo.placefinder table to do the geocoding. This API is currently
+restricted to 2,000 queries per day per app and is intended for non-commercial
+usage. If \code{TRUE}, it will use the proper BOSS APIs directly. The
+commercial API is better documented and appears to occasionally return
+better results.}
+
 \item{key}{The Yahoo! Developer Network BOSS application key. Register
 for an API key at \link{https://developer.yahoo.com/boss/}}
 
@@ -88,7 +95,8 @@ details.
 }
 \examples{
 \dontrun{
-find_place("SFO")
+find_place("151 3rd St., San Francisco, CA", commercial=TRUE)
+find_place("151 3rd St., San Francisco, CA", commercial=FALSE)
 find_place(name="Yosimete National Park")
 find_place(line1="Franklin St at Broadway St, San Francisco, CA, USA 94109")
 find_place(house="151", street="3rd St.", postal=94103, city="San Francisco",

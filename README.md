@@ -33,7 +33,7 @@ It turns out that most freely available Geocoders have pretty stringent limitati
 
 ## Todo
 
-  - [ ] It looks like you can do <= 2,000 queries per day for free via a YQL interface for non-commercial usage. [More info](https://developer.yahoo.com/boss/geo/docs/free_YQL.html#table_pf). We should support this.
+  - [x] It looks like you can do <= 2,000 queries per day for free via a YQL interface for non-commercial usage. [More info](https://developer.yahoo.com/boss/geo/docs/free_YQL.html#table_pf). We should support this.
   - [ ] Support [PlaceSpotter API](https://developer.yahoo.com/boss/placespotter/)
   - [ ] Support [Search](https://developer.yahoo.com/boss/search/)
   - [ ] [Other YDN products](https://developer.yahoo.com/everything.html)
