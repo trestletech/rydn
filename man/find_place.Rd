@@ -3,27 +3,95 @@
 \alias{find_place}
 \title{Geolocate an address}
 \usage{
-find_place(location, name, key = getOption("RYDN_KEY"),
+find_place(location = NULL, name = NULL, line1 = NULL, line2 = NULL,
+  line3 = NULL, house = NULL, street = NULL, unittype = NULL,
+  unit = NULL, xstreet = NULL, postal = NULL, neighborhood = NULL,
+  city = NULL, county = NULL, state = NULL, country = NULL,
+  woeid = NULL, reverse = FALSE, locale = "en_US", flags = "",
+  gflags = "", key = getOption("RYDN_KEY"),
   secret = getOption("RYDN_SECRET"))
 }
 \arguments{
 \item{location}{The location name or address you want to lookup}
 
-\item{name}{The name of a point of interest to lookup}
+\item{name}{The name of a place or area of interest. See \link{https://developer.yahoo.com/boss/geo/docs/address-formats.html#poi-aoi-names}}
+
+\item{line1}{First line of address (street address or intersection).}
+
+\item{line2}{Second line of address (city-state-zip in US).}
+
+\item{line3}{Third line of address (postal code in UK).}
+
+\item{house}{House number.}
+
+\item{street}{Street name.}
+
+\item{unittype}{Unit type, such as apartment (\code{Apt}) or suite \code{Ste}.}
+
+\item{unit}{Unit/suite/apartment/box number.}
+
+\item{xstreet}{Cross street name.}
+
+\item{postal}{Postal code.}
+
+\item{neighborhood}{Yahoo's "Level 4 Administrative name." If used, \code{city},
+\code{county}, \code{state}, and \code{country} should also be specified.}
+
+\item{city}{Yahoo's "Level 3 Administrative name." If used, \code{county},
+\code{state}, and \code{country} should also be specified.}
+
+\item{county}{Yahoo's "Level 2 Administrative name." If used, \code{state},
+and \code{country} should also be specified.}
+
+\item{state}{Yahoo's "Level 1 Administrative name." If used, \code{country}
+should also be specified.}
+
+\item{country}{Yahoo's "Level 0 Administrative name" or country code.}
+
+\item{woeid}{An integer representing a "Where on Earth ID." See \link{https://developer.yahoo.com/geo/geoplanet/guide/concepts.html#woeids}}
+
+\item{reverse}{\code{TRUE} if reverse geocoding (looking up a location by its
+latitude and longitude).}
+
+\item{locale}{}
+
+\item{flags}{The \code{flags} parameter to pass through to the YDN query. See
+\link{https://developer.yahoo.com/boss/geo/docs/control-parameters.html}.}
+
+\item{gflags}{The \code{gflags} parameter to pass through to the YDN query. See
+\link{https://developer.yahoo.com/boss/geo/docs/control-parameters.html}.
+\code{R} will be added if \code{reverse=TRUE}. "J" is always added.}
 
 \item{key}{The Yahoo! Developer Network BOSS application key. Register
 for an API key at \link{https://developer.yahoo.com/boss/}}
 
 \item{secret}{The Yahoo! Developer Network BOSS application secret}
 }
+\value{
+A dataframe with all results. See \link{https://developer.yahoo.com/boss/geo/docs/supported_responses.html}
+for a description of what each field means.
+}
 \description{
 Lookup the latitude and longitude of a location using the place's
 name or address.
 }
 \details{
+For details about the various parameters that can be sent and, see \link{https://developer.yahoo.com/boss/geo/docs/address-formats.html#fully-parsed-format}.
+Information about formats can be found here: \link{https://developer.yahoo.com/boss/geo/docs/address-formats.html#fully-parsed-format}.
+
 There are charges associated with the use of this function set by
 your Yahoo! BOSS application. See
 \link{https://info.yahoo.com/legal/us/yahoo/boss/pricing/} for pricing
 details.
+}
+\examples{
+\dontrun{
+find_place("SFO")
+find_place(name="Yosimete National Park")
+find_place(line1="Franklin St at Broadway St, San Francisco, CA, USA 94109")
+find_place(house="151", street="3rd St.", postal=94103, city="San Francisco",
+  state="CA", country="USA")
+find_place(location="37.787082+-122.400929", reverse=TRUE)
+}
 }
 
