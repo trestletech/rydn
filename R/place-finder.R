@@ -182,9 +182,6 @@ find_place <- function(location=NULL,
     res <- con$query$results$Result
     
     if (con$query$count > 1){
-      # Get all col names
-      nms <- unique(unlist(sapply(res, names)))
-      
       res <- transformResults(res)
       df <- do.call(rbind.data.frame, res)
     } else{
@@ -203,6 +200,9 @@ find_place <- function(location=NULL,
 }
 
 transformResults <- function(res){
+  # Get all col names
+  nms <- unique(unlist(sapply(res, names)))
+  
   for (i in 1:length(res)){
     # ensure they all have the same columns
     res[[i]] <- res[[i]][nms]
