@@ -171,26 +171,47 @@ find_place <- function(location=NULL,
   urlqa <- paste0(urlq, oaqstr)
   
   q <- httr::GET(urlqa)
-  stop_for_status(q)
+  httr::stop_for_status(q)
+  
+  # Create factor-less DF
+  saf <- getOption("stringsAsFactors")
+  options(stringsAsFactors=FALSE)
   
   if (!commercial){
-    con <- content(q)
+    con <- httr::content(q)
     res <- con$query$results$Result
     
     if (con$query$count > 1){
-      for (i in 1:length(res)){
-        res[[i]][sapply(res[[i]], is.null)] <- NA
-      }  
+      # Get all col names
+      nms <- unique(unlist(sapply(res, names)))
+      
+      res <- transformResults(res)
       df <- do.call(rbind.data.frame, res)
     } else{
       res[sapply(res, is.null)] <- NA
       df <- as.data.frame(res)
     }
   } else{
-    res <- content(q)$bossresponse$placefinder$results
+    res <- httr::content(q)$bossresponse$placefinder$results
+    res <- transformResults(res)
     df <- do.call(rbind.data.frame, res)
   }
+  
+  options(stringsAsFactors=saf)
+  
   df
+}
+
+transformResults <- function(res){
+  for (i in 1:length(res)){
+    # ensure they all have the same columns
+    res[[i]] <- res[[i]][nms]
+    names(res[[i]]) <- nms
+    
+    # Transform NULLs
+    res[[i]][sapply(res[[i]], is.null)] <- NA
+  }
+  res
 }
 
 listToQS <- function(qp){
